@@ -18,7 +18,7 @@ const multer = Multer({
   }
 });
 
-const Datastore = require('@google-cloud/datastore');
+const {Datastore} = require('@google-cloud/datastore');
 const projectId = 'simc-20';
 const datastore = new Datastore({
   projectId: projectId,
@@ -112,9 +112,9 @@ app.get('/', (req, res, next) => {
   let alert = {alert: req.session.alert, alertType: req.session.alertType};
   req.session.alert = '';
   req.session.alertType = 'none';
-  if(req.hostname == 'localhost' || req.hostname == 'simc-20.appspot.com' || req.hostname == '192.168.137.1' || req.hostname == '192.168.1.49' || req.hostname == '192.168.0.104') {
-    res.render('home.ejs', {userData: userData[req.session.userKey], alert: alert.alert, alertType: alert.alertType});
-    // res.sendFile(path.join(__dirname, 'views', 'scoreboard.html'));
+  if(true || req.hostname == 'localhost' || req.hostname == 'simc-20.appspot.com' || req.hostname == '192.168.137.1' || req.hostname == '192.168.1.49' || req.hostname == '192.168.0.104') {
+    // res.render('home.ejs', {userData: userData[req.session.userKey], alert: alert.alert, alertType: alert.alertType});
+    res.sendFile(path.join(__dirname, 'views', 'scoreboard.html'));
     return ;
   }
   res.render('result.ejs', {userData: userData[req.session.userKey], alert: alert.alert, alertType: alert.alertType});
@@ -382,11 +382,6 @@ app.get('/exam', (req, res, next) => {
       }
       else if(req.query.part == 1) {
         res.render('exam/profile.ejs', {oldAnswer: renderData.oldAnswer, part: req.query.part});
-      }
-      else if(req.query.part > 1 && req.hostname != 'localhost') {
-        req.session.alert = alert.alert;
-        req.session.alertType = alert.alertType;
-        res.redirect('/');
       }
       else if(req.query.part == 3) {
         res.render('exam/prepare.ejs', {part: req.query.part, alert: alert.alert, alertType: alert.alertType});
